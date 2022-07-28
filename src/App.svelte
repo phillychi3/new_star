@@ -33,12 +33,20 @@
 				{
 					authorName: chat.authorName,
 					authorhead: chat.authorPhoto,
-					message: stringify(chat.message)
+					message:chat.message,
+					ismember: chat.membership
 				}
 			);
 			comments=comments
 			if (chat.membership != undefined) {
-				mambercomments.push(stringify(chat.message));
+				mambercomments.push(
+					{
+						authorName: chat.authorName,
+						authorhead: chat.authorPhoto,
+						message: chat.message,
+						ismember: chat.membership
+					}
+				);
 				mambercomments=mambercomments
 			}
 
@@ -52,7 +60,7 @@
 		<Col xs="1">
 			<div class="sidelist">
 				<div class="url_button">
-				<Button color="danger" on:click={toggle}>Open Modal</Button>
+				<Button color="danger" on:click={toggle}>enter url</Button>
 				<Modal isOpen={open} {toggle}>
 					<ModalHeader {toggle}>填入直播網址</ModalHeader>
 					<FormGroup>
@@ -76,17 +84,62 @@
 		<div class="contant">
 			<div class="item">
 				{#each comments as comment}
+					{#if comment.ismember == undefined}
 					<article>
-						<img src={comment.authorhead} alt="">
-						<p>{comment.authorName}</p>
-						<p>{comment.message}</p>
+						<div class="livetalk">
+							<img src={comment.authorhead} alt="" style="margin-right:5px">
+							<div class="ismemberimg">
+								<!-- svelte-ignore a11y-missing-attribute -->
+								<span>{comment.authorName}</span>
+								{#each comment.message as message}
+									{#if message.text != undefined}
+										<p>{message.text}</p>
+									{:else if message.emoji != undefined}
+										<img src={message.emoji.image.thumbnails[0].url} alt="">
+									{/if}
+								{/each}
+							</div>
+						</div>
 					</article>
+					{:else}
+					<article>
+						<div class="livetalk">
+							<img src={comment.authorhead} alt="" style="margin-right:5px">
+							<div class="ismemberimg">
+
+								<!-- svelte-ignore a11y-missing-attribute -->
+								<span>{comment.authorName}<img src={comment.ismember.thumbnail}></span>
+								{#each comment.message as message}
+									{#if message.text != undefined}
+										<p>{message.text}</p>
+									{:else if message.emoji != undefined}
+										<img src={message.emoji.image.thumbnails[0].url} alt="">
+									{/if}
+								{/each}
+							</div>
+						</div>
+					</article>
+					{/if}
 				{/each}
 			</div>
 			<div class="item">
 				{#each mambercomments as comment}
 					<article>
-						<p>{comment}</p>
+						<div class="livetalk">
+							<img src={comment.authorhead} alt="" style="margin-right:5px">
+							<div class="ismemberimg">
+
+								<!-- svelte-ignore a11y-missing-attribute -->
+								<span>{comment.authorName}<img src={comment.ismember.thumbnail}></span>
+								{#each comment.message as message}
+									{#if message.text != undefined}
+										<p>{message.text}</p>
+									{:else if message.emoji != undefined}
+										<img src={message.emoji.image.thumbnails[0].url} alt="">
+									{/if}
+								{/each}
+							</div>
+						</div>
 					</article>
 				{/each}
 			</div>
@@ -141,8 +194,16 @@
 		align-items: center;
 		margin: 10px;
 	}
-	
-
-    	
+	.ismemberimg img{
+		height:23px;
+	}
+	.livetalk{
+		display: flex;
+		overflow-wrap: break-word;
+		font-size: 13px;
+	}
+	.livetalk img{
+		height:25px;
+	}
 
 </style>
