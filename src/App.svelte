@@ -1,5 +1,6 @@
 <script>
 	import { Masterchat, stringify } from "masterchat";
+	import { beforeUpdate, afterUpdate } from 'svelte';
 	import {
     Button,
     Modal,
@@ -53,6 +54,22 @@
 		});
 		mc.listen();
 	}
+
+	let div1,div2,div3;
+	let autoscroll1,autoscroll2,autoscroll3;
+	// 如果在最下面
+	beforeUpdate(() => {
+		autoscroll1 = div1 && (div1.offsetHeight + div1.scrollTop) > (div1.scrollHeight - 30);
+		autoscroll2 = div2 && (div2.offsetHeight + div2.scrollTop) > (div2.scrollHeight - 30);
+		autoscroll3 = div3 && (div3.offsetHeight + div3.scrollTop) > (div3.scrollHeight - 30);
+
+	});
+	// 滑動到最下面
+	afterUpdate(() => {
+		if (autoscroll1) div1.scrollTo(0, div1.scrollHeight);
+		if (autoscroll2) div2.scrollTo(0, div2.scrollHeight);
+		if (autoscroll3) div3.scrollTo(0, div3.scrollHeight);
+	});
 </script>
 
 <main>
@@ -82,7 +99,7 @@
 		</Col>
 		<Col xs="11">
 		<div class="contant">
-			<div class="item">
+			<div class="item" bind:this={div1}>
 				{#each comments as comment}
 					{#if comment.ismember == undefined}
 					<article>
@@ -90,7 +107,7 @@
 							<img src={comment.authorhead} alt="" style="margin-right:5px">
 							<div class="ismemberimg">
 								<!-- svelte-ignore a11y-missing-attribute -->
-								<span>{comment.authorName}</span>
+								<span class="notmember">{comment.authorName}</span>
 								{#each comment.message as message}
 									{#if message.text != undefined}
 										<p>{message.text}</p>
@@ -108,7 +125,7 @@
 							<div class="ismemberimg">
 
 								<!-- svelte-ignore a11y-missing-attribute -->
-								<span>{comment.authorName}<img src={comment.ismember.thumbnail}></span>
+								<span class="showmember">{comment.authorName}<img src={comment.ismember.thumbnail}></span>
 								{#each comment.message as message}
 									{#if message.text != undefined}
 										<p>{message.text}</p>
@@ -122,7 +139,7 @@
 					{/if}
 				{/each}
 			</div>
-			<div class="item">
+			<div class="item" bind:this={div2}>
 				{#each mambercomments as comment}
 					<article>
 						<div class="livetalk">
@@ -130,7 +147,7 @@
 							<div class="ismemberimg">
 
 								<!-- svelte-ignore a11y-missing-attribute -->
-								<span>{comment.authorName}<img src={comment.ismember.thumbnail}></span>
+								<span class="showmember">{comment.authorName}<img src={comment.ismember.thumbnail}></span>
 								{#each comment.message as message}
 									{#if message.text != undefined}
 										<p>{message.text}</p>
@@ -197,6 +214,9 @@
 	.ismemberimg img{
 		height:23px;
 	}
+	.ismemberimg p{
+		display: inline-block;
+	}
 	.livetalk{
 		display: flex;
 		overflow-wrap: break-word;
@@ -204,6 +224,12 @@
 	}
 	.livetalk img{
 		height:25px;
+	}
+	.showmember{
+		color: #2ba640;
+	}
+	.notmember{
+		color: rgba(200, 200, 200, 0.5);
 	}
 
 </style>
