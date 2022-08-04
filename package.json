@@ -3,15 +3,25 @@
   "version": "1.1.0",
   "private": true,
   "main": "main.js",
+  "author": {
+    "name": "phillyhci3",
+    "email": "phillychi3@gmail.com",
+    "url": "https://info.phillychi3.ml"
+  },
   "build": {
-    "icon": "public/favicon.png",
-    "productName": "Svelte and Electron App",
+    "icon": "public/newstar.png",
+    "productName": "New Star",
     "files": [
       "public/**/*",
       "main.js",
       "preload.js"
     ],
-    "win": {},
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
     "linux": {},
     "mac": {}
   },
@@ -28,8 +38,7 @@
     "electron-serve": "^1.1.0",
     "masterchat": "^1.1.0",
     "sveltestrap": "^5.9.0",
-    "translate": "^1.4.1",
-    "youtube-chat": "^2.1.1"
+    "translate": "^1.4.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",

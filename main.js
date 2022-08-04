@@ -23,7 +23,7 @@ function createWindow() {
             // enableRemoteModule: true,
             // contextIsolation: false
         },
-        icon: path.join(__dirname, 'public/favicon.png'),
+        icon: path.join(__dirname, 'public/newstar.png'),
         show: false,
         webPreferences: {
             webSecurity: false
